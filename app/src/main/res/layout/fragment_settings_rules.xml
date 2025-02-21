@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#282846"
+    tools:context=".SettingsFragment">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="16dp">
+
+        <ImageView
+            android:id="@+id/snookTableImageView"
+            android:layout_width="359dp"
+            android:layout_height="498dp"
+            android:layout_marginTop="8dp"
+            android:contentDescription="Snooker table used to show the placement of the balls"
+            android:src="@drawable/snookertable"
+            app:layout_constraintBottom_toTopOf="@+id/ballScoresImageView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/rulesTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:fontFamily="sans-serif-light"
+            android:justificationMode="inter_word"
+            android:lineSpacingExtra="12sp"
+            android:text="@string/rules"
+            android:textColor="#FFFFFF"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toTopOf="@+id/psTextView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/ballScoresImageView" />
+
+        <TextView
+            android:id="@+id/psTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:layout_marginBottom="8dp"
+            android:fontFamily="sans-serif-light"
+            android:text="@string/rules_ps"
+            android:textAlignment="center"
+            android:textColor="#787878"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/rulesTextView" />
+
+        <ImageView
+            android:id="@+id/ballScoresImageView"
+            android:layout_width="363dp"
+            android:layout_height="198dp"
+            android:layout_marginTop="16dp"
+            android:contentDescription="Value of every ball"
+            app:layout_constraintBottom_toTopOf="@id/rulesTextView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/snookTableImageView"
+            android:src="@drawable/ballscoring" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.core.widget.NestedScrollView>

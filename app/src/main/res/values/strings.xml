@@ -1,3 +1,32 @@
 <resources>
     <string name="app_name">snooKounter</string>
+    <string name="howtouse">The app is split up into 2 sides: one for each player.
+        \nWhen it is your turn, <b>tap</b> any of the colored buttons on your side to increase the score by the amount equal to the ball.
+            If you commit a foul, <b>hold</b> the white button to give the opponent 4 points,
+            or the higher valued buttons if necessary.
+        \nTo <b>undo</b> a score change, swipe vertically across the screen.
+        \nAnd to <b>reset</b>, swipe in the same manner back and forth multiple times.
+        \n<b>Extra note:</b> if necessary, you can also <b>hold</b> the red button to reduce your score by 2!
+    </string>
+    <string name="rules">The balls are placed on the table as shown in the <b>first picture</b>.
+        \nThe white ball can be placed anywhere inside the D on the table.
+        \n<b>The game plays as follows</b>: at the start of your turn, you have to pot any one of the <b>red</b> balls, and if you do,
+            you move on to pot any of the other <b>colored</b> balls, and you repeat that afterwards - red, colored, red, colored, etc.
+            Potted red balls are not brought back, but <b>potted colored balls are placed back to their original position.</b>
+            If that is not possible, they are placed on the highest available spot, and if not that,
+            then as close to their base position as possible.
+        \nAfterwards, when all of the red balls are potted, colored balls are potted from lowest to highest
+            (without placing them back of course). The player with the most points wins!
+        \n<b>Which leads to scoring-</b> a potted ball is worth the number of points as shown in the <b>second picture.</b>
+            If you do not touch/pot the right ball, your shot is considered a <b>foul</b>, and your opponent gets points-
+            a minimum of 4 and as high as the incorrectly potted ball, up to 7, as well as the opportunity to place
+            the cue ball wherever on the table.
+        \n<b>Extra tidbits:</b> if only the black remains, and the score is even, a tie breaker happens, where
+            it is played until someone either pots the black or fouls. And, calling a shot a <b>snooker</b> is when
+            the ball that was meant to be hit was missed because there was no clear line of sight of the ball.
+    </string>
+    <string name="rules_ps">
+        p.s.: what is written here does ignore some specifics of the official rules - this was done to
+            make it more accessible to newcomers (hopefully)
+    </string>
 </resources>

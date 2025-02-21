@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#282846"
+    tools:context=".SettingsFragment">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="16dp">
+
+        <Switch
+            android:id="@+id/fullscreenSwitch"
+            android:layout_width="360dp"
+            android:layout_height="60dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
+            android:checked="true"
+            android:fontFamily="sans-serif-light"
+            android:text="   Full Screen"
+            android:tooltipText="Hides or shows the navigation and status bars."
+            android:textColor="#FFFFFF"
+            android:textSize="24sp"
+            app:layout_constraintBottom_toTopOf="@id/animationsSwitch"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/howToUseButton" />
+
+        <Switch
+            android:id="@+id/leadFlairSwitch"
+            android:layout_width="360dp"
+            android:layout_height="60dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
+            android:checked="true"
+            android:fontFamily="sans-serif-light"
+            android:text="        Lead Flair"
+            android:textColor="#FFFFFF"
+            android:textSize="24sp"
+            android:tooltipText="Toggles highlighting for whenever someone takes the lead."
+            app:layout_constraintBottom_toTopOf="@id/rulesButton"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/animationsSwitch" />
+
+        <Switch
+            android:id="@+id/animationsSwitch"
+            android:layout_width="360dp"
+            android:layout_height="60dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
+            android:checked="true"
+            android:fontFamily="sans-serif-light"
+            android:text="   Animations"
+            android:textColor="#FFFFFF"
+            android:textSize="24sp"
+            android:tooltipText="Toggles various animations for tapping, undoing and resetting."
+            app:layout_constraintBottom_toTopOf="@id/leadFlairSwitch"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/fullscreenSwitch" />
+
+        <Button
+            android:id="@+id/rulesButton"
+            android:layout_width="360dp"
+            android:layout_height="60dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
+            android:backgroundTint="#00000000"
+            android:fontFamily="sans-serif-light"
+            android:text="Rules"
+            android:tooltipText="See the rules of snooker."
+            android:textAlignment="viewStart"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+            android:textColor="#FFFFFF"
+            android:textSize="24sp"
+            app:layout_constraintBottom_toTopOf="@+id/aboutButton"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/leadFlairSwitch" />
+
+        <Button
+            android:id="@+id/aboutButton"
+            android:layout_width="360dp"
+            android:layout_height="60dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="16dp"
+            android:backgroundTint="#00000000"
+            android:fontFamily="sans-serif-light"
+            android:text="About"
+            android:tooltipText="About the app."
+            android:textAlignment="viewStart"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+            android:textColor="#FFFFFF"
+            android:textSize="24sp"
+            app:layout_constraintBottom_toTopOf="@+id/howtoplayTextView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/rulesButton" />
+
+        <Button
+            android:id="@+id/howToUseButton"
+            android:layout_width="360dp"
+            android:layout_height="60dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="32dp"
+            android:backgroundTint="#00000000"
+            android:fontFamily="sans-serif-light"
+            android:text="How to Use App"
+            android:tooltipText="Shows you the app's features."
+            android:textAlignment="viewStart"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+            android:textColor="#FFFFFF"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@+id/fullscreenSwitch"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/howtoplayTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="65dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginEnd="65dp"
+            android:text="Hold an option to learn more about it."
+            android:textColor="#787878"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/aboutButton" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.core.widget.NestedScrollView>
