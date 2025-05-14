@@ -89,32 +89,68 @@
 
     <TextView
         android:id="@+id/p1ScoreLabel"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="16dp"
+        android:layout_marginEnd="8dp"
         android:fontFamily="sans-serif-light"
         android:gravity="center"
         android:text="0"
         android:textColor="#FFFFFF"
         android:textSize="34sp"
+        android:textStyle="italic"
         app:layout_constraintBottom_toTopOf="@+id/p1W"
+        app:layout_constraintDimensionRatio="w,1.5:1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/p2ScoreLabel"
+        android:id="@+id/p1NameLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:fontFamily="sans-serif-condensed-medium"
+        android:gravity="center"
+        android:text="P1"
+        android:textColor="#FFFFFF"
+        android:textSize="34sp"
+        android:textStyle="italic"
+        app:layout_constraintBottom_toTopOf="@+id/p1W"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/p2ScoreLabel"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
         android:layout_marginBottom="8dp"
         android:fontFamily="sans-serif-light"
         android:gravity="center"
         android:text="0"
         android:textColor="#FFFFFF"
         android:textSize="34sp"
+        android:textStyle="italic"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintDimensionRatio="w,1.5:1"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/p2W" />
+
+    <TextView
+        android:id="@+id/p2NameLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:fontFamily="sans-serif-condensed-medium"
+        android:gravity="center"
+        android:text="P2"
+        android:textColor="#FFFFFF"
+        android:textSize="34sp"
+        android:textStyle="italic"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/p2W" />
 
     <Button
@@ -218,12 +254,11 @@
         android:layout_width="240dp"
         android:layout_height="100dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="55dp"
         android:backgroundTint="#D32F2F"
         app:layout_constraintBottom_toTopOf="@+id/p1Y"
         app:layout_constraintEnd_toStartOf="@+id/p1W"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/p1ScoreLabel" />
+        app:layout_constraintTop_toBottomOf="@+id/p1ScoreLabel" />
 
     <Button
         android:id="@+id/p2R"
@@ -231,13 +266,11 @@
         android:layout_width="240dp"
         android:layout_height="100dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginBottom="70dp"
         android:backgroundTint="#D32F2F"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/p2ScoreLabel"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/p2W"
-        app:layout_constraintTop_toBottomOf="@+id/p2P"
-        tools:ignore="SpeakableTextPresentCheck" />
+        app:layout_constraintTop_toBottomOf="@+id/p2P" />
 
     <Button
         android:id="@+id/p2W"
@@ -280,5 +313,14 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:src="@drawable/undo_icon" />
+
+    <View
+        android:id="@+id/blackOverlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#141414"
+        android:clickable="true"
+        android:focusable="true"
+        android:visibility="gone" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -26,7 +26,7 @@
             the ball that was meant to be hit was missed because there was no clear line of sight of the ball.
     </string>
     <string name="rules_ps">
-        p.s.: what is written here does ignore some specifics of the official rules - this was done to
-            make it more accessible to newcomers (hopefully)
+        <i>p.s.: what is written here does ignore some specifics of the official rules - this was done to
+            make it more accessible to newcomers (hopefully)</i>
     </string>
 </resources>

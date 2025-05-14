@@ -7,11 +7,18 @@ import android.content.Intent
 import android.graphics.Color
 import android.graphics.Typeface
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
+import android.text.InputFilter
 import android.util.Log
 import android.view.GestureDetector
 import android.view.MotionEvent
+import android.view.View
+import android.view.animation.Animation
 import android.view.animation.AnimationUtils
+import android.view.inputmethod.EditorInfo
 import android.widget.Button
+import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
@@ -34,15 +41,25 @@ class MainActivity : AppCompatActivity(), GestureDetector.OnGestureListener, Ges
     private var lastActionByP1 = true
     private var swipesNum = 0
     private lateinit var mDetector: GestureDetectorCompat
-    private lateinit var p1ScoreText: TextView; private lateinit var p2ScoreText: TextView
+    private lateinit var p1ScoreText: TextView; private lateinit var p2ScoreText: TextView; private lateinit var p1NameText: TextView; private lateinit var p2NameText: TextView
+    // For black screen overlay
+    private lateinit var blackOverlay: View
+    private var inactivityTimeout = 15_000L // this is defined just to avoid an error, because it gets quickly overwritten with either default or saved value from UserSettings
+    private val handler = Handler(Looper.getMainLooper())
+    private val hideScreenRunnable = Runnable { showBlackOverlay(true) }
+    private var blackOverlayAnimating = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_main)
+
         // Score label, main activity findViewById setup (and toast)
         p1ScoreText = findViewById(R.id.p1ScoreLabel)
         p2ScoreText = findViewById(R.id.p2ScoreLabel)
+        p1NameText = findViewById(R.id.p1NameLabel)
+        p2NameText = findViewById(R.id.p2NameLabel)
+        blackOverlay = findViewById(R.id.blackOverlay)
         val mainActivityView = findViewById<ConstraintLayout>(R.id.main)
         val toastManager = ToastManager(this)
 
@@ -63,6 +80,9 @@ class MainActivity : AppCompatActivity(), GestureDetector.OnGestureListener, Ges
         UserSettings.isFirstBoot = sharedPreferences.getBoolean(UserSettings.IS_FIRST_BOOT_KEY, true)
         UserSettings.animationSwitch = sharedPreferences.getBoolean(UserSettings.ANIMATION_KEY, UserSettings.ANIMATION_ON)
         UserSettings.leadFlairSwitch = sharedPreferences.getBoolean(UserSettings.LEAD_FLAIR_KEY, UserSettings.LEAD_FLAIR_ON)
+        UserSettings.dimScreenSwitch = sharedPreferences.getBoolean(UserSettings.DIM_SCREEN_KEY, UserSettings.DIM_SCREEN_ON)
+        UserSettings.dimTimeoutButton = sharedPreferences.getLong(UserSettings.DIM_TIMEOUT_KEY, UserSettings.DIM_TIMEOUT_DEFAULT)
+
         if(UserSettings.fullScreenSwitch)
             WindowInsetsControllerCompat(window, window.decorView).hide(WindowInsetsCompat.Type.systemBars())
         else
@@ -73,6 +93,9 @@ class MainActivity : AppCompatActivity(), GestureDetector.OnGestureListener, Ges
             UserSettings.isFirstBoot = false
             getSharedPreferences(UserSettings.PREFERENCES, MODE_PRIVATE).edit().putBoolean(UserSettings.IS_FIRST_BOOT_KEY, UserSettings.isFirstBoot).apply()
         }
+        inactivityTimeout = UserSettings.dimTimeoutButton
+        if(UserSettings.dimScreenSwitch)
+            resetInactivityTimer()
 
         /*
         Makes undo work again, checks underflow and overflow, updates the label to equal score for P1,
@@ -109,8 +132,8 @@ class MainActivity : AppCompatActivity(), GestureDetector.OnGestureListener, Ges
                             setTextColor(Color.YELLOW)
                         else
                             setTextColor(Color.WHITE)
-                        textSize = 170f
-                        typeface = Typeface.create("sans-serif-black", Typeface.NORMAL)
+                        textSize = 148f
+                        typeface = Typeface.create("sans-serif-black", Typeface.ITALIC)
                     }
                     mainActivityView.addView(p1AnimTextView)
                     p1AnimTextView.text = p1ScoreText.text
@@ -123,7 +146,7 @@ class MainActivity : AppCompatActivity(), GestureDetector.OnGestureListener, Ges
 
                     val scaleUpP1 = ObjectAnimator.ofFloat(p1AnimTextView, TextView.SCALE_X, 0f, 1f)
                     val rotateP1 = ObjectAnimator.ofFloat(p1AnimTextView, TextView.ROTATION, 270f, (320..360).random() / 1f)
-                    val translationP1 = ObjectAnimator.ofFloat(p1AnimTextView, TextView.TRANSLATION_X, 600f, 300f)
+                    val translationP1 = ObjectAnimator.ofFloat(p1AnimTextView, TextView.TRANSLATION_X, 600f, 100f)
                     val fadeOutP1 = ObjectAnimator.ofFloat(p1AnimTextView, TextView.ALPHA, 1f, 0f).setDuration(3000)
 
                     animatorSet.playTogether(scaleUpP1, rotateP1, translationP1, fadeOutP1)
@@ -172,8 +195,8 @@ class MainActivity : AppCompatActivity(), GestureDetector.OnGestureListener, Ges
                             setTextColor(Color.YELLOW)
                         else
                             setTextColor(Color.WHITE)
-                        textSize = 170f
-                        typeface = Typeface.create("sans-serif-black", Typeface.NORMAL)
+                        textSize = 148f
+                        typeface = Typeface.create("sans-serif-black", Typeface.ITALIC)
                     }
 
                     mainActivityView.addView(p2AnimTextView)
@@ -186,7 +209,7 @@ class MainActivity : AppCompatActivity(), GestureDetector.OnGestureListener, Ges
 
                     val scaleUpP2 = ObjectAnimator.ofFloat(p2AnimTextView, TextView.SCALE_X, 0f, 1f)
                     val rotateP2 = ObjectAnimator.ofFloat(p2AnimTextView, TextView.ROTATION, 90f, (0..40).random() / 1f)
-                    val translationP2 = ObjectAnimator.ofFloat(p2AnimTextView, TextView.TRANSLATION_X, -300f, 300f)
+                    val translationP2 = ObjectAnimator.ofFloat(p2AnimTextView, TextView.TRANSLATION_X, -300f, 100f)
                     val fadeOutP2 = ObjectAnimator.ofFloat(p2AnimTextView, TextView.ALPHA, 1f, 0f).setDuration(3000)
 
                     p2AnimTextView.text = p2ScoreText.text
@@ -216,6 +239,58 @@ class MainActivity : AppCompatActivity(), GestureDetector.OnGestureListener, Ges
 //            p2ScoreText.text = p2Score.toString()
 //            true
 //        }
+
+        blackOverlay.setOnClickListener {
+            if (!blackOverlayAnimating) {
+                resetInactivityTimer()// Dismiss and restart timer
+            }
+        }
+
+        // P1 name label
+        p1NameText.setOnClickListener {
+            handler.removeCallbacks(hideScreenRunnable)// Pauses timer for black screen
+            val editText = EditText(this)
+            editText.hint = "(max 5 characters)"
+            editText.filters = arrayOf(InputFilter.LengthFilter(5))
+            editText.setSingleLine(true)
+
+            AlertDialog.Builder(this)
+                .setTitle("P1 Name")
+                .setView(editText)
+                .setPositiveButton("OK") { _, _ ->
+                    if(UserSettings.dimScreenSwitch)
+                        resetInactivityTimer()// Resumes timer for black screen
+                    val name = editText.text.toString()
+                    if (name.isNotBlank()) {
+                        p1NameText.text = name
+                    }
+                }
+                .setNegativeButton("Cancel", null)
+                .show()
+        }
+
+        // P2 name label
+        p2NameText.setOnClickListener {
+            handler.removeCallbacks(hideScreenRunnable)// Pauses timer for black screen
+            val editText = EditText(this)
+            editText.hint = "(max 5 characters)"
+            editText.filters = arrayOf(InputFilter.LengthFilter(5))
+            editText.setSingleLine(true)
+
+            AlertDialog.Builder(this)
+                .setTitle("P2 Name")
+                .setView(editText)
+                .setPositiveButton("OK") { _, _ ->
+                    if(UserSettings.dimScreenSwitch)
+                        resetInactivityTimer()// Resumes timer for black screen
+                    val name = editText.text.toString()
+                    if (name.isNotBlank()) {
+                        p2NameText.text = name
+                    }
+                }
+                .setNegativeButton("Cancel", null)
+                .show()
+        }
 
         // Player 1 balls
         val p1R = findViewById<Button>(R.id.p1R)
@@ -402,22 +477,22 @@ class MainActivity : AppCompatActivity(), GestureDetector.OnGestureListener, Ges
             // Makes the score text yellow for P1
             if(p1Score > p2Score){
                 p1ScoreText.setTextColor(Color.YELLOW)
-                p1ScoreText.typeface = Typeface.create("sans-serif-black", Typeface.NORMAL)
+                p1ScoreText.typeface = Typeface.create("sans-serif-black", Typeface.ITALIC)
                 p2ScoreText.setTextColor(Color.WHITE)
-                p2ScoreText.typeface = Typeface.create("sans-serif-light", Typeface.NORMAL)
+                p2ScoreText.typeface = Typeface.create("sans-serif-light", Typeface.ITALIC)
             }
             // Makes the score text yellow for P2
             else if(p2Score > p1Score){
                 p2ScoreText.setTextColor(Color.YELLOW)
-                p2ScoreText.typeface = Typeface.create("sans-serif-black", Typeface.NORMAL)
+                p2ScoreText.typeface = Typeface.create("sans-serif-black", Typeface.ITALIC)
                 p1ScoreText.setTextColor(Color.WHITE)
-                p1ScoreText.typeface = Typeface.create("sans-serif-light", Typeface.NORMAL)
+                p1ScoreText.typeface = Typeface.create("sans-serif-light", Typeface.ITALIC)
             }
             else{
                 p1ScoreText.setTextColor(Color.WHITE)
-                p1ScoreText.typeface = Typeface.create("sans-serif-light", Typeface.NORMAL)
+                p1ScoreText.typeface = Typeface.create("sans-serif-light", Typeface.ITALIC)
                 p2ScoreText.setTextColor(Color.WHITE)
-                p2ScoreText.typeface = Typeface.create("sans-serif-light", Typeface.NORMAL)
+                p2ScoreText.typeface = Typeface.create("sans-serif-light", Typeface.ITALIC)
             }
         }
     }
@@ -497,8 +572,8 @@ class MainActivity : AppCompatActivity(), GestureDetector.OnGestureListener, Ges
                     if(UserSettings.leadFlairSwitch){
                         p1ScoreText.setTextColor(Color.WHITE)
                         p2ScoreText.setTextColor(Color.WHITE)
-                        p1ScoreText.typeface = Typeface.create("sans-serif-light", Typeface.NORMAL)
-                        p2ScoreText.typeface = Typeface.create("sans-serif-light", Typeface.NORMAL)
+                        p1ScoreText.typeface = Typeface.create("sans-serif-light", Typeface.ITALIC)
+                        p2ScoreText.typeface = Typeface.create("sans-serif-light", Typeface.ITALIC)
                     }
                     if(UserSettings.animationSwitch){
                         undoAnimImageView.setImageResource(R.drawable.reset_icon)
@@ -566,8 +641,10 @@ class MainActivity : AppCompatActivity(), GestureDetector.OnGestureListener, Ges
         return true
     }
 
-    // Enables swipe gesture over buttons
+    // Enables swipe gesture over buttons and resets black screen timer
     override fun dispatchTouchEvent(event: MotionEvent?): Boolean {
+        if(UserSettings.dimScreenSwitch)
+            resetInactivityTimer()
         if (event != null) {
             onTouchEvent(event)  // Pass event to gesture detector
         }
@@ -611,5 +688,43 @@ class MainActivity : AppCompatActivity(), GestureDetector.OnGestureListener, Ges
 
         // Show the dialog
         builder.show()
+    }
+
+    // For black screen overlay
+    private fun showBlackOverlay(show: Boolean) {
+        if (show && blackOverlay.visibility != View.VISIBLE && !blackOverlayAnimating) {
+            val fadeIn = AnimationUtils.loadAnimation(this, R.anim.fade_in)
+            blackOverlay.visibility = View.VISIBLE
+            blackOverlay.startAnimation(fadeIn)
+
+        } else if (!show && blackOverlay.visibility == View.VISIBLE && !blackOverlayAnimating) {
+            val fadeOut = AnimationUtils.loadAnimation(this, R.anim.fade_out)
+            blackOverlayAnimating = true
+            blackOverlay.startAnimation(fadeOut)
+
+            fadeOut.setAnimationListener(object : Animation.AnimationListener {
+                override fun onAnimationStart(animation: Animation?) {}
+                override fun onAnimationEnd(animation: Animation?) {
+                    blackOverlay.visibility = View.GONE
+                    blackOverlayAnimating = false
+                }
+                override fun onAnimationRepeat(animation: Animation?) {}
+            })
+        }
+    }
+
+    private fun resetInactivityTimer() {
+        handler.removeCallbacks(hideScreenRunnable)
+        showBlackOverlay(false)
+        handler.postDelayed(hideScreenRunnable, inactivityTimeout)
+    }
+    override fun onUserInteraction() {
+        super.onUserInteraction()
+        if(UserSettings.dimScreenSwitch)
+            resetInactivityTimer()
+    }
+    override fun onDestroy() {
+        super.onDestroy()
+        handler.removeCallbacks(hideScreenRunnable)
     }
 }

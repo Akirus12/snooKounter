@@ -28,7 +28,7 @@
             android:textSize="20sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/snookountertextView" />
+            app:layout_constraintTop_toBottomOf="@+id/githubTextView" />
 
         <ImageView
             android:id="@+id/appIconImageView"
@@ -47,16 +47,31 @@
             android:id="@+id/snookountertextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
             android:fontFamily="sans-serif-light"
-            android:text="snooKounter - by Akirus"
+            android:text="snooKounter V2.1 - by Akirus"
             android:textColor="#FFFFFF"
             android:textSize="24sp"
             android:textStyle="bold"
-            app:layout_constraintBottom_toTopOf="@+id/aboutTextView"
+            app:layout_constraintBottom_toTopOf="@+id/githubTextView"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.497"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/appIconImageView" />
+
+        <TextView
+            android:id="@+id/githubTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:autoLink="web"
+            android:text="https://github.com/Akirus12/snooKounter"
+            android:textColorLink="#9696FF"
+            android:textIsSelectable="true"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toTopOf="@+id/aboutTextView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/snookountertextView" />
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.core.widget.NestedScrollView>

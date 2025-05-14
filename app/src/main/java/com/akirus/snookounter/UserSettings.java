@@ -19,4 +19,13 @@ public class UserSettings extends Application {
     public static final String LEAD_FLAIR_KEY = "leadFlairKey";
     public static final boolean LEAD_FLAIR_ON = true;
     public static boolean leadFlairSwitch;
+
+    public static final String DIM_SCREEN_KEY = "dimScreenKey";
+    public static final boolean DIM_SCREEN_ON = true;
+    public static boolean dimScreenSwitch;
+
+    public static final String DIM_TIMEOUT_KEY = "dimTimeoutKey";
+    public static final Long DIM_TIMEOUT_DEFAULT = 15_000L;
+    public static Long dimTimeoutButton;
+
 }
